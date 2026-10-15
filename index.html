@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101827">
+    <meta name="description" content="A small, offline preview of Zero, an everyday personal-assistant project founded by Graham Temofeh.">
+    <title>Zero — Everyday Personal Assistant</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --page: #101827;
+        --panel: #172235;
+        --panel-soft: #1d2b41;
+        --line: #2c3a50;
+        --text: #f4f6fb;
+        --muted: #aab6c8;
+        --accent: #a7f3d0;
+        --accent-ink: #10251e;
+        --danger: #ffc1b8;
+      }
+
+      * { box-sizing: border-box; }
+      html { min-width: 320px; }
+      body {
+        min-height: 100svh;
+        margin: 0;
+        background: radial-gradient(ellipse at 50% -12%, #263958 0, var(--page) 54%);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.55;
+      }
+      button, textarea { font: inherit; }
+      button { color: inherit; }
+      .shell { width: min(100% - 32px, 1040px); margin: 0 auto; }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 20px 0;
+        border-bottom: 1px solid rgb(255 255 255 / 9%);
+      }
+      .brand { display: flex; align-items: center; gap: 11px; font-size: 1.04rem; font-weight: 750; letter-spacing: .02em; }
+      .mark { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font-size: 1.2rem; }
+      .header-right { display: flex; align-items: center; gap: 10px; }
+      .tag { padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: .76rem; white-space: nowrap; }
+      .tag-live { display: inline-flex; align-items: center; gap: 7px; }
+      .tag-live::before { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); content: ""; }
+
+      main { padding: clamp(34px, 6vw, 68px) 0 54px; }
+      .hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr); gap: 36px; align-items: end; margin-bottom: 30px; }
+      .eyebrow { color: var(--accent); font-size: .75rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+      h1 { max-width: 650px; margin: 12px 0 14px; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .99; letter-spacing: -.05em; }
+      .hero-copy { max-width: 590px; margin: 0; color: var(--muted); font-size: clamp(1rem, 2vw, 1.12rem); }
+      .founder { margin-top: 16px; color: #d4deeb; font-size: .85rem; }
+      .how-card { padding: 18px 20px; border-left: 2px solid var(--accent); border-radius: 0 14px 14px 0; background: rgb(29 43 65 / 72%); }
+      .how-card h2 { margin: 0 0 8px; font-size: .9rem; }
+      .flow { margin: 0; color: var(--muted); font-size: .86rem; }
+      .flow strong { color: var(--text); font-weight: 650; }
+
+      .demo-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+      .demo-label h2 { margin: 0; font-size: 1rem; }
+      .demo-label span { color: var(--muted); font-size: .78rem; }
+      .grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(270px, .88fr); gap: 16px; align-items: start; }
+      .stack { display: grid; gap: 16px; }
+      .card { min-width: 0; padding: clamp(17px, 2.4vw, 23px); border: 1px solid var(--line); border-radius: 18px; background: rgb(23 34 53 / 91%); box-shadow: 0 18px 50px rgb(0 0 0 / 14%); }
+      .card h3 { margin: 0 0 4px; font-size: 1rem; }
+      .subcopy { margin: 0; color: var(--muted); font-size: .86rem; }
+
+      .prompt-label, .note-label { display: block; margin: 18px 0 7px; color: #d6dfec; font-size: .82rem; font-weight: 650; }
+      textarea { display: block; width: 100%; min-height: 94px; resize: vertical; padding: 12px 13px; border: 1px solid #3a4a62; border-radius: 12px; outline: none; background: #111b2b; color: var(--text); font-size: 16px; }
+      textarea::placeholder { color: #8493a8; }
+      textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(167 243 208 / 12%); }
+      .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 11px 0 0; }
+      .chip { min-height: 34px; padding: 6px 10px; border: 1px solid #3a4a62; border-radius: 999px; background: transparent; color: #d4deeb; cursor: pointer; font-size: .76rem; }
+      .chip:hover { border-color: var(--accent); color: var(--accent); }
+      .primary { min-height: 44px; margin-top: 14px; padding: 10px 16px; border: 0; border-radius: 10px; background: var(--accent); color: var(--accent-ink); cursor: pointer; font-weight: 750; }
+      .primary:hover { filter: brightness(.95); }
+      .secondary { min-height: 40px; padding: 8px 13px; border: 1px solid #3a4a62; border-radius: 10px; background: transparent; color: var(--text); cursor: pointer; font-size: .85rem; font-weight: 650; }
+      .secondary:hover { border-color: var(--accent); }
+      button:focus-visible { outline: 3px solid var(--text); outline-offset: 3px; }
+
+      .reply { display: grid; min-height: 120px; margin-top: 16px; padding: 15px; align-content: center; border: 1px dashed #40516a; border-radius: 12px; background: var(--panel-soft); color: var(--muted); font-size: .9rem; }
+      .reply strong { display: block; margin-bottom: 5px; color: var(--text); }
+      .reply ol { margin: 6px 0 0; padding-left: 20px; }
+      .reply li + li { margin-top: 4px; }
+      .sample-notice { margin: 11px 0 0; color: var(--muted); font-size: .74rem; }
+
+      .task-list { display: grid; gap: 4px; margin: 15px 0 0; padding: 0; list-style: none; }
+      .task { display: flex; align-items: flex-start; gap: 11px; padding: 10px 2px; border-bottom: 1px solid rgb(255 255 255 / 7%); color: #e5ebf4; font-size: .88rem; }
+      .task:last-child { border-bottom: 0; }
+      .task label { display: inline; margin: 0; color: inherit; cursor: pointer; font-size: inherit; font-weight: inherit; }
+      .task input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--accent); flex: 0 0 auto; }
+      .task input:checked + span { color: var(--muted); text-decoration: line-through; }
+      .task-count { margin: 9px 0 0; color: var(--muted); font-size: .75rem; }
+
+      .note-form { display: grid; gap: 10px; margin-top: 14px; }
+      .note-form textarea { min-height: 74px; }
+      .note-form .secondary { justify-self: start; }
+      .notes-list { display: grid; gap: 8px; margin: 13px 0 0; padding: 0; list-style: none; }
+      .note-item { padding: 10px 12px; border-radius: 10px; background: var(--panel-soft); color: #dce5f0; font-size: .83rem; overflow-wrap: anywhere; }
+      .empty-note { color: var(--muted); font-size: .8rem; }
+
+      .privacy-note { display: flex; gap: 10px; align-items: flex-start; margin: 16px 0 0; padding: 12px 14px; border: 1px solid rgb(167 243 208 / 18%); border-radius: 12px; color: #c5d5d0; font-size: .78rem; }
+      .privacy-note strong { color: var(--accent); white-space: nowrap; }
+      footer { display: flex; justify-content: space-between; gap: 14px; padding: 18px 0 28px; border-top: 1px solid rgb(255 255 255 / 9%); color: var(--muted); font-size: .78rem; }
+      footer a { color: #dce5f0; text-underline-offset: 3px; }
+
+      @media (max-width: 760px) {
+        .hero { grid-template-columns: 1fr; gap: 20px; }
+        .grid { grid-template-columns: 1fr; }
+        .stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 560px) {
+        .shell { width: min(100% - 24px, 1040px); }
+        header { padding: 15px 0; }
+        main { padding-top: 34px; }
+        .stack { grid-template-columns: 1fr; }
+        .hero { margin-bottom: 24px; }
+        .demo-label { align-items: flex-start; flex-direction: column; gap: 2px; }
+        footer { flex-direction: column; }
+        .privacy-note { flex-direction: column; gap: 4px; }
+      }
+      @media (max-width: 360px) {
+        .shell { width: calc(100% - 20px); }
+        .tag { padding: 4px 8px; font-size: .69rem; }
+        .brand { gap: 8px; }
+        .mark { width: 34px; height: 34px; }
+        h1 { font-size: 2.25rem; }
+        .card { padding: 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <div class="brand"><span class="mark" aria-hidden="true">0</span><span>Zero</span></div>
+        <div class="header-right">
+          <span class="tag">Founded by Graham Temofeh</span>
+          <span class="tag tag-live">Offline demo</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <div>
+            <div class="eyebrow">Everyday personal assistant</div>
+            <h1 id="page-title">Make space for your next step.</h1>
+            <p class="hero-copy">Zero is designed to help turn everyday requests into clear, manageable next steps—from planning your day to sorting out a small task.</p>
+          </div>
+          <aside class="how-card" aria-label="How Zero is intended to work">
+            <h2>How Zero is intended to help</h2>
+            <p class="flow"><strong>You ask</strong> in your own words → <strong>Zero suggests</strong> a plan or draft → <strong>You decide</strong> what happens next.</p>
+          </aside>
+        </section>
+
+        <section aria-labelledby="demo-heading">
+          <div class="demo-label">
+            <h2 id="demo-heading">Try the small demo</h2>
+            <span>Sample interactions · nothing leaves this page</span>
+          </div>
+
+          <div class="grid">
+            <article class="card">
+              <h3>What’s on your mind?</h3>
+              <p class="subcopy">Try a sample request or type a simple everyday task.</p>
+              <form id="assistant-form">
+                <label class="prompt-label" for="prompt">Your request</label>
+                <textarea id="prompt" maxlength="300" placeholder="For example: help me plan a calmer morning"></textarea>
+                <div class="chips" aria-label="Sample requests">
+                  <button class="chip" type="button" data-prompt="Help me plan a calm morning">Plan a morning</button>
+                  <button class="chip" type="button" data-prompt="Help me break a task into steps">Break down a task</button>
+                  <button class="chip" type="button" data-prompt="Help me clear my head and choose one next step">Find a next step</button>
+                </div>
+                <button class="primary" type="submit">Get a sample suggestion</button>
+              </form>
+              <div class="reply" id="reply" aria-live="polite">
+                <div><strong>A place to begin</strong>Choose a sample request or type a short everyday task.</div>
+              </div>
+              <p class="sample-notice">Responses are fixed examples for this preview. They are not generated by an AI model.</p>
+            </article>
+
+            <div class="stack">
+              <section class="card" aria-labelledby="tasks-heading">
+                <h3 id="tasks-heading">A short list for today</h3>
+                <p class="subcopy">Sample tasks you can check off.</p>
+                <ul class="task-list" id="task-list">
+                  <li class="task"><input type="checkbox" id="task-one"><span><label for="task-one">Take a short walk</label></span></li>
+                  <li class="task"><input type="checkbox" id="task-two"><span><label for="task-two">Pick up a few groceries</label></span></li>
+                  <li class="task"><input type="checkbox" id="task-three"><span><label for="task-three">Set aside time to read</label></span></li>
+                </ul>
+                <p class="task-count" id="task-count" aria-live="polite">0 of 3 sample tasks done</p>
+              </section>
+
+              <section class="card" aria-labelledby="notes-heading">
+                <h3 id="notes-heading">Quick note</h3>
+                <p class="subcopy">Capture a thought in this page while you explore.</p>
+                <form class="note-form" id="note-form">
+                  <label class="note-label" for="note-input">A note for yourself</label>
+                  <textarea id="note-input" maxlength="180" placeholder="Type a short note…"></textarea>
+                  <button class="secondary" type="submit">Add note</button>
+                </form>
+                <ul class="notes-list" id="notes-list" aria-live="polite">
+                  <li class="empty-note" id="empty-note">Your temporary notes will appear here.</li>
+                </ul>
+              </section>
+            </div>
+          </div>
+
+          <p class="privacy-note"><strong>Preview privacy</strong><span>This page runs locally in your browser. It makes no network requests and does not save what you type after you close or refresh the page.</span></p>
+        </section>
+      </main>
+
+      <footer>
+        <span>Zero · Founded by Graham Temofeh</span>
+        <a href="docs/how-zero-works.md">How Zero is intended to work</a>
+      </footer>
+    </div>
+
+    <script>
+      const promptField = document.querySelector("#prompt");
+      const reply = document.querySelector("#reply");
+
+      const sampleReplies = [
+        {
+          matches: ["morning", "day", "plan"],
+          title: "A gentle plan for your day",
+          steps: ["Choose one thing that would make today feel complete.", "Give it a short, focused block of time.", "Leave a little space between tasks."]
+        },
+        {
+          matches: ["step", "break", "task", "start"],
+          title: "Make the task smaller",
+          steps: ["Write down the first visible action.", "Set a 10-minute timer and begin there.", "Pause, then choose the next small step."]
+        },
+        {
+          matches: ["head", "next", "clear", "think"],
+          title: "A simple way to reset",
+          steps: ["Write down what is taking up your attention.", "Circle the item you can influence today.", "Pick one small action and leave the rest for later."]
+        }
+      ];
+
+      function renderReply(titleText, steps) {
+        reply.replaceChildren();
+        const title = document.createElement("strong");
+        title.textContent = titleText;
+        reply.append(title);
+        const list = document.createElement("ol");
+        steps.forEach((step) => {
+          const item = document.createElement("li");
+          item.textContent = step;
+          list.append(item);
+        });
+        reply.append(list);
+      }
+
+      document.querySelectorAll("[data-prompt]").forEach((button) => {
+        button.addEventListener("click", () => {
+          promptField.value = button.dataset.prompt;
+          promptField.focus();
+        });
+      });
+
+      document.querySelector("#assistant-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const request = promptField.value.trim().toLowerCase();
+        if (!request) {
+          renderReply("Add a short request", ["Try one of the sample prompts, or type a small everyday task."]);
+          return;
+        }
+        const sample = sampleReplies.find((candidate) => candidate.matches.some((word) => request.includes(word)));
+        renderReply(
+          sample?.title ?? "Start with one small step",
+          sample?.steps ?? ["Name the next action you can do in a few minutes.", "Do just that part first.", "Then decide whether anything else needs your attention."]
+        );
+      });
+
+      const taskBoxes = [...document.querySelectorAll("#task-list input[type='checkbox']")];
+      const taskCount = document.querySelector("#task-count");
+      function updateTaskCount() {
+        const done = taskBoxes.filter((box) => box.checked).length;
+        taskCount.textContent = `${done} of ${taskBoxes.length} sample tasks done`;
+      }
+      taskBoxes.forEach((box) => box.addEventListener("change", updateTaskCount));
+
+      const noteForm = document.querySelector("#note-form");
+      const noteInput = document.querySelector("#note-input");
+      const notesList = document.querySelector("#notes-list");
+      noteForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const text = noteInput.value.trim();
+        if (!text) {
+          noteInput.focus();
+          return;
+        }
+        document.querySelector("#empty-note")?.remove();
+        const item = document.createElement("li");
+        item.className = "note-item";
+        item.textContent = text;
+        notesList.prepend(item);
+        noteInput.value = "";
+        noteInput.focus();
+      });
+    </script>
+  </body>
+</html>
